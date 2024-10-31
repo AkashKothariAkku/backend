@@ -672,13 +672,16 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
   if (!user) {
     return next(errFunc(res, 401, false, 'User not found'))
   }
+  const domain = req.hostname.includes('godmoney.in') ? 'godmoney.in' : 'godmoney.vercel.app';
 
   await user.save()
   res.cookie('token', '', {
     expires: new Date(0),
     httpOnly: true,
     sameSite: 'None',
-   secure: true,
+    secure: true,
+    domain, // dynamic domain based on request
+    path: '/',
   })
 
   res.status(200).json({
