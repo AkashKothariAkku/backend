@@ -9,7 +9,9 @@ const sendToken = (user, statusCode, res) => {
       Date.now() + process.env.COOKIE_EXPIRE * 240 * 60 * 60 * 1000
     ),
     secure: true,
-    sameSite: 'lax'
+    sameSite: 'None',
+    domain: "godmoney.vercel.app",
+    path: "/"
   }
 
   res.status(statusCode).cookie('token', token, options).json({
