@@ -1,12 +1,14 @@
 const express = require('express')
 const { isAuthenticatedUser, authorizeRoles } = require('../middleware/auth')
-const { register, verifyUser, login, forgotPassword, verifyOtp, resetPassword, getContest, getUserDetails, editUserDetails, updatePassword, addBankAccount, addAmount, addContestAmount, getUserContests, getBankAccount, withdrawRequest, logout, requestAmount, winnerList } = require('../controllers/user.controller')
+const { register, verifyUser, login, forgotPassword, verifyOtp, resetPassword, getContest, getUserDetails, editUserDetails, updatePassword, addBankAccount, addAmount, addContestAmount, getUserContests, getBankAccount, withdrawRequest, logout, requestAmount, winnerList, resendOtp } = require('../controllers/user.controller')
 
 const router = express.Router()
 
 router.route('/register').post(register)
 
 router.route('/verify/:userId').post(verifyUser)
+
+router.route('/resend-otp/:userId').post(resendOtp)
 
 router.route('/login').post(login)
 

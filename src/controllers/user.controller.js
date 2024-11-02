@@ -103,6 +103,43 @@ exports.verifyUser = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res)
 })
 
+// Resend Otp
+
+exports.resendOtp = catchAsyncErrors(async (req, res, next) => {
+  // creating token hash
+
+  const user = await User.findOne({
+    _id: req?.params?.userId
+  })
+
+  
+  if (!user) {
+    return errFunc(res, 400, false, 'User not found')
+  }
+
+  if (user?.isVerified === true) {
+    return errFunc(res, 400, false, 'User already verified')
+  }
+
+    const verifyToken = await user.getVerifyUserToken()
+    const message = `Thanks so much for signing up on GodMoney! We're really excited to have you as part of our community. Please verify your email: \n\n ${verifyToken}`
+
+    sendEmail({
+      email: user.email,
+      subject: 'Welcome to GodMoney! Please verify your email ',
+      message
+    })
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        userId: user?._id
+      },
+      message: `Email sent to ${user.email} successfully`
+    })
+
+})
+
 // // Register Admin
 // exports.registerAdminSync = catchAsyncErrors(async (req, res, next) => {
 //   const { name, email, password } = req.body
