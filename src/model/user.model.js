@@ -80,7 +80,7 @@ userSchema.methods.getJWTToken = function () {
 // Generating Verify User Reset Token
 userSchema.methods.getVerifyUserToken = async function () {
   // Hashing and adding verifyToken to userSchema
-  this.verifyUserToken = '1234'
+  this.verifyUserToken = Math.floor(1000 + Math.random() * 9000).toString();
   this.verifyUserExpire = Date.now() + 15 * 60 * 1000
   this.save()
   return this.verifyUserToken
