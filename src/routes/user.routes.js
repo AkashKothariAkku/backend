@@ -18,7 +18,7 @@ router.route('/verify-otp/:userId').post(verifyOtp)
 
 router.route('/reset-password/:userId').post(resetPassword)
 
-router.route('/get-contest').get(isAuthenticatedUser, getContest)
+router.route('/get-contest').get(getContest)
 
 router.route('/get-user-contest').get(isAuthenticatedUser, getUserContests)
 
