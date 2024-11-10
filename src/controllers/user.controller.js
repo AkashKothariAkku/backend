@@ -619,7 +619,8 @@ exports.getUserContests = catchAsyncErrors(async (req, res, next) => {
   const objectIdUserId = mongoose.Types.ObjectId.createFromHexString(req?.user?.id);
   let contests = await ContestAmount.aggregate([
     {
-      $match: { userId: objectIdUserId, winnerId: {$exists: false} }
+      $match: { 
+        userId: objectIdUserId }
     },
     {
       $sort: { createdAt: -1 }
@@ -635,12 +636,24 @@ exports.getUserContests = catchAsyncErrors(async (req, res, next) => {
         from: "contests",
         localField: "_id",
         foreignField: "_id",
-        as: "contestDetails"
+        as: "contestDetails",
+        pipeline: [
+          {
+            $match: {
+              winnerId: {
+                $exists: false
+              }
+            }
+          }
+        ]
       }
     },
     {
-      $unwind: "$contestDetails"
-    },
+      $unwind: {
+        path: "$contestDetails",
+        preserveNullAndEmptyArrays: false
+      }
+    },    
     {
       $project: {
         _id: 0,
