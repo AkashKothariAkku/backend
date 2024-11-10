@@ -372,7 +372,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 // Get Contest List
 exports.getContest = catchAsyncErrors(async (req, res, next) => {
 
-  const contest = await Contest.find({ status: "active" })
+  const contest = await Contest.find({ status: "active", winnerId: {$exists: false} })
   res.status(200).json({
     success: true,
     data: contest,
@@ -619,7 +619,7 @@ exports.getUserContests = catchAsyncErrors(async (req, res, next) => {
   const objectIdUserId = mongoose.Types.ObjectId.createFromHexString(req?.user?.id);
   let contests = await ContestAmount.aggregate([
     {
-      $match: { userId: objectIdUserId }
+      $match: { userId: objectIdUserId, winnerId: {$exists: false} }
     },
     {
       $sort: { createdAt: -1 }
